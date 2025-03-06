@@ -18,4 +18,6 @@ public:
 	virtual void PostInitializeComponents() override;
 	virtual void Possess(APawn *aPawn) override;
 	
+protected:
+	virtual void BeginPlay() override;
 };
