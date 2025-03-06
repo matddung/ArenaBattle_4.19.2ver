@@ -2,12 +2,13 @@
 
 AFountain::AFountain()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BODY"));
 	Water = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WATER"));
 	Light = CreateDefaultSubobject<UPointLightComponent>(TEXT("LIGHT"));
 	Splash = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("SPLASH"));
+	Movement = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("MOVEMENT"));
 
 	RootComponent = Body;
 	Water->SetupAttachment(Body);
@@ -35,17 +36,32 @@ AFountain::AFountain()
 	if (PS_SPLASH.Succeeded()) {
 		Splash->SetTemplate(PS_SPLASH.Object);
 	}
+
+	RotateSpeed = 30.0f;
+
+	Movement->RotationRate = FRotator(0.0f, RotateSpeed, 0.0f);
 }
 
 void AFountain::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	ABLOG_S(Warning);
+	ABLOG(Warning, TEXT("Actor Name : %s, ID : %d, Location X : %.3f"), *GetName(), ID, GetActorLocation().X);
 }
 
 void AFountain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	AddActorLocalRotation(FRotator(0.0f, RotateSpeed * DeltaTime, 0.0f));
 }
 
+void AFountain::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+	Super::EndPlay(EndPlayReason);
+	ABLOG_S(Warning);
+}
+
+void AFountain::PostInitializeComponents() {
+	Super::PostInitializeComponents();
+	ABLOG_S(Warning);
+}
