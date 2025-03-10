@@ -13,9 +13,9 @@ UCLASS()
 class ARENABATTLE_API AABGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
 public:
 	AABGameMode();
 	
-	virtual void PostLogin(APlayerController *NewPlayer) override;
+	virtual void PostLogin(APlayerController* NewPlayer) override;
 };

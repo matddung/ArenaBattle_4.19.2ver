@@ -25,10 +25,11 @@ AABPawn::AABPawn()
 	Mesh->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 	SpringArm->TargetArmLength = 400.0f;
 	SpringArm->SetRelativeRotation(FRotator(-15.0f, 0.0f, 0.0f));
-	
+
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_CARDBOARD(TEXT("/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"));
 
-	if (SK_CARDBOARD.Succeeded()) {
+	if (SK_CARDBOARD.Succeeded())
+	{
 		Mesh->SetSkeletalMesh(SK_CARDBOARD.Object);
 	}
 
@@ -36,7 +37,8 @@ AABPawn::AABPawn()
 
 	static ConstructorHelpers::FClassFinder<UAnimInstance> WARRIOR_ANIM(TEXT("/Game/Book/Animations/WarriorAnimBlueprint.WarriorAnimBlueprint_C"));
 
-	if (WARRIOR_ANIM.Succeeded()) {
+	if (WARRIOR_ANIM.Succeeded())
+	{
 		Mesh->SetAnimInstanceClass(WARRIOR_ANIM.Class);
 	}
 }
@@ -46,12 +48,6 @@ void AABPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Mesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
-	UAnimationAsset* AnimAsset = LoadObject<UAnimationAsset>(nullptr, TEXT("/Game/Book/Animations/WarriorRun.WarriorRun"));
-
-	if (AnimAsset != nullptr) {
-		Mesh->PlayAnimation(AnimAsset, true);
-	}
 }
 
 // Called every frame
@@ -59,6 +55,18 @@ void AABPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AABPawn::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	ABLOG_S(Warning);
+}
+
+void AABPawn::PossessedBy(AController* NewController)
+{
+	ABLOG_S(Warning);
+	Super::PossessedBy(NewController);
 }
 
 // Called to bind functionality to input
@@ -70,22 +78,12 @@ void AABPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis(TEXT("LeftRight"), this, &AABPawn::LeftRight);
 }
 
-void AABPawn::PostInitializeComponents() {
-	Super::PostInitializeComponents();
-	ABLOG_S(Warning);
-}
-
-void AABPawn::PossessedBy(AController *NewController) {
-	ABLOG_S(Warning);
-	Super::PossessedBy(NewController);
-}
-
-void AABPawn::UpDown(float NewAxisValue) {
-	// ABLOG(Warning, TEXT("%f"), NewAxisValue);
+void AABPawn::UpDown(float NewAxisValue)
+{
 	AddMovementInput(GetActorForwardVector(), NewAxisValue);
 }
 
-void AABPawn::LeftRight(float NewAxisValue) {
-	// ABLOG(Warning, TEXT("%f"), NewAxisValue);
+void AABPawn::LeftRight(float NewAxisValue)
+{
 	AddMovementInput(GetActorRightVector(), NewAxisValue);
 }
